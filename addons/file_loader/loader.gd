@@ -1,4 +1,4 @@
-tool
+@tool
 extends Node
 
 signal loaded_file
@@ -15,35 +15,32 @@ func load_external_texture(path):
 
 
 func load_external_mp3(path):
-	var mp3_file = File.new()
-	mp3_file.open(path, File.READ)
-	var bytes = mp3_file.get_buffer(mp3_file.get_len())
+	var mp3_file = FileAccess.open(path, FileAccess.READ)
+	var bytes = mp3_file.get_buffer(mp3_file.get_length())
 	var stream = AudioStreamMP3.new()
 	stream.data = bytes
 	emit_signal("loaded_file")
-	mp3_file.close()
+	mp3_file = null
 	return stream
 
 
 func load_external_wav(path):
-	var wav_file = File.new()
-	wav_file.open(path, File.READ)
-	var bytes = wav_file.get_buffer(wav_file.get_len())
-	var stream = AudioStreamMP3.new()
+	var wav_file = FileAccess.open(path, FileAccess.READ)
+	var bytes = wav_file.get_buffer(wav_file.get_length())
+	var stream = AudioStreamWAV.new()
 	stream.data = bytes
 	emit_signal("loaded_file")
-	wav_file.close()
+	wav_file = null
 	return stream
 
 
-func load_external_ogg(path):
-	var ogg_file = File.new()
-	ogg_file.open(path, File.READ)
-	var bytes = ogg_file.get_buffer(ogg_file.get_len())
-	var stream = AudioStreamMP3.new()
-	stream.data = bytes
+func load_external_ogg(path): # FIXME AudioStreamOggVorbis broken in Godot 4 alpha
+	var ogg_file = FileAccess.open(path, FileAccess.READ)
+	var bytes = ogg_file.get_buffer(ogg_file.get_length())
+	var stream = AudioStreamOggVorbis.new()
+	stream.data = bytes 
 	emit_signal("loaded_file")
-	ogg_file.close()
+	ogg_file = null
 	return stream
 
 
